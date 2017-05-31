@@ -22,6 +22,8 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.springframework.boot.origin.OriginTrackedValue;
+import org.springframework.boot.origin.TextResourceOrigin;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
@@ -109,6 +111,13 @@ public class OriginTrackedPropertiesLoaderTests {
 		OriginTrackedValue value = this.properties.get("test-property-value-comment");
 		assertThat(getValue(value)).isEqualTo("foo !bar #foo");
 		assertThat(getLocation(value)).isEqualTo("36:29");
+	}
+
+	@Test
+	public void getPropertyWithMultilineImmediateBang() {
+		OriginTrackedValue value = this.properties.get("test-multiline-immediate-bang");
+		assertThat(getValue(value)).isEqualTo("!foo");
+		assertThat(getLocation(value)).isEqualTo("39:1");
 	}
 
 	@Test
@@ -227,7 +236,7 @@ public class OriginTrackedPropertiesLoaderTests {
 		if (value == null) {
 			return null;
 		}
-		return ((TextResourcePropertyOrigin) value.getOrigin()).getLocation().toString();
+		return ((TextResourceOrigin) value.getOrigin()).getLocation().toString();
 	}
 
 }
